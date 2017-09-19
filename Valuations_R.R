@@ -1,6 +1,6 @@
 ##----LibCall----
 library(Quandl)
-Quandl.api_key('t1Hc9QxXD75WZYvR3cga')
+Quandl.api_key('----')
 library(knitr)
 library(reshape2)
 library(ggplot2)
