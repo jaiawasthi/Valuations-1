@@ -1,0 +1,26 @@
+---
+title: "Valuations_R_Mark"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+
+```{r echo = FALSE}
+library(knitr)
+read_chunk('Valuations_R.R')
+```
+
+```{r LibCall,echo=FALSE,message=FALSE}
+```
+
+## Income Statement
+
+
+```{r Income_Statement,echo=FALSE,comment=NA}
+```
+
+## Growth Rate Plots
+```{r Growth_Rates,echo=FALSE,comment=NA}
+```
