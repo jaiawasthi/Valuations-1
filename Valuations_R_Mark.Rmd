@@ -1,8 +1,8 @@
 ---
 title: "Valuations_R_Mark"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 
@@ -23,4 +23,8 @@ read_chunk('Valuations_R.R')
 
 ## Growth Rate Plots
 ```{r Growth_Rates,echo=FALSE,comment=NA}
+```
+
+## DCF
+```{r DCF,echo=FALSE,comment=NA}
 ```
