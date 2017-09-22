@@ -28,3 +28,7 @@ read_chunk('Valuations_R.R')
 ## DCF
 ```{r DCF,echo=FALSE,comment=NA}
 ```
+
+##FCFE
+```{r FCFE,echo=FALSE,comment=NA}
+```

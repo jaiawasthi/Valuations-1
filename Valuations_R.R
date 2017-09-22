@@ -1,7 +1,7 @@
 
 ##----LibCall----
 library(Quandl)
-Quandl.api_key('----')
+Quandl.api_key('-----')
 library(knitr)
 library(reshape2)
 library(ggplot2)
@@ -164,9 +164,6 @@ PV_last = last(EPS_Transition)*last_payout/(coe_last - g)
 
 PV_sum = PV_last + PV_sum
 
-Growth_Rates_PS = cbind(EPS_growth,REVSH1_growth,OPMSH1_growth,EBIDTSH1_growth)
-Payout_ratio = Quandl(paste("DEB/",Company,"_",freq,"_","DIVPAY",sep=""),type="xts",start_date=from,end_date = till)[,1]
-ROE = Quandl(paste("DEB/",Company,"_",freq,"_","ROE",sep=""),type="xts",start_date=from,end_date = till)[,1]
 
 cat("Cost of Equity Calculation")
 Rf_d = percent(Rf)
@@ -178,6 +175,93 @@ rownames(assumptions) = c("Risk Free Rate","Beta","Risk Premium","Country Risk P
 Total = rbind(PV_last,PV_sum)
 rownames(Total) = c("Last Value","Value per Share")
 print(kable(assumptions,format = "pandoc"))
+
+
+
+cat("Final Values")
+Total_d = specify_decimal(Total,0)
+print(kable(Total_d,format = "pandoc"))
+
+
+##----FCFE----
+EPS = last(Quandl(paste("DEB/",Company,"_",freq,"_","EPS",sep=""),type="xts",start_date=from,end_date = till)[,1])
+
+
+cat("Growth Phase")
+#Growth Phase
+DPR = c(0.1,0.1,0.15,0.15)
+ROE = c(0.2,0.2,0.2,0.2)
+growth_rate = (1-DPR)*ROE
+EPS_growth_phase = as.vector(EPS)*((1+growth_rate)^(1:4))
+Capital_Adequacy = 0.05
+FCFE = EPS_growth_phase*0.95
+discount_rate = (1+coe)^(1/(1:4))
+FCFE_PV = FCFE*discount_rate
+
+PV_sum = sum(FCFE_PV)
+
+
+FCFE_Growth_1 = cbind(EPS_growth_phase)
+FCFE_Growth_2 = specify_decimal(FCFE_Growth_1,1)
+growth_rate_d = percent(as.vector(growth_rate))
+Capital_Adequacy_d = percent(as.vector(Capital_Adequacy))
+FCFE_Growth_3 = cbind(FCFE_Growth_2,growth_rate_d,Capital_Adequacy_d)
+FCFE_d = specify_decimal(FCFE,1)
+FCFE_Growth_4 = cbind(FCFE_Growth_3,FCFE_d)
+
+rownames(FCFE_Growth_4) = c("2018-03-31","2019-03-31","2020-03-31","2021-03-31")
+colnames(FCFE_Growth_4) =c("EPS","growth rate","Capital Adequacy","FCFE")
+
+print(kable(t(FCFE_Growth_4),format="pandoc"))
+
+cat("Transition Phase")
+#Transition Phase
+DPR = c(0.2,0.3,0.35,0.40)
+ROE = c(0.2,0.18,0.15,0.10)
+growth_rate = (1-DPR)*ROE
+EPS_Transition = last(EPS_growth_phase)*((1+growth_rate)^(1:4))
+FCFE = EPS_Transition*0.95
+Capital_Adequacy = 0.05
+discount_rate = (1+coe)^(1/(5:8))
+FCFE_PV = FCFE*discount_rate
+
+FCFE_Growth_1 = cbind(EPS_Transition)
+FCFE_Growth_2 = specify_decimal(FCFE_Growth_1,1)
+growth_rate_d = percent(as.vector(growth_rate))
+Capital_Adequacy_d = percent(as.vector(Capital_Adequacy))
+FCFE_Growth_3 = cbind(FCFE_Growth_2,growth_rate_d,Capital_Adequacy_d)
+FCFE_d = specify_decimal(FCFE,1)
+FCFE_Growth_4 = cbind(FCFE_Growth_3,FCFE_d)
+
+rownames(FCFE_Growth_4) = c("2022-03-31","2023-03-31","2024-03-31","2025-03-31")
+colnames(FCFE_Growth_4) =c("EPS","growth rate","Capital Adequacy","FCFE")
+
+print(kable(t(FCFE_Growth_4),format="pandoc"))
+
+
+PV_sum = PV_sum + sum(FCFE_PV)
+
+
+#Final Phase
+coe_last = Rf+Rp
+last_payout = 0.4
+g = 0.10
+PV_last = last(EPS_Transition)*last_payout/(coe_last - g)
+
+PV_sum = PV_last + PV_sum
+
+
+cat("Cost of Equity Calculation")
+Rf_d = percent(Rf)
+Rp_d = percent(Rp)
+Country_premium_d = percent(Country_premium)
+beta_d = specify_decimal(beta,2)
+assumptions = rbind(Rf_d,beta,Rp_d,Country_premium_d)
+rownames(assumptions) = c("Risk Free Rate","Beta","Risk Premium","Country Risk Premium")
+Total = rbind(PV_last,PV_sum)
+rownames(Total) = c("Last Value","Value per Share")
+print(kable(assumptions,format = "pandoc"))
+
 
 
 cat("Final Values")
