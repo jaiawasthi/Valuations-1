@@ -1,11 +1,9 @@
 ---
-title: "Valuations_R_Mark"
+title: "Analysis"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
-
-
 
 ```{r echo = FALSE}
 library(knitr)
@@ -17,18 +15,45 @@ read_chunk('Valuations_R.R')
 
 ## Income Statement
 
-
 ```{r Income_Statement,echo=FALSE,comment=NA}
 ```
 
-## Growth Rate Plots
-```{r Growth_Rates,echo=FALSE,comment=NA}
+## Ratios
+### Per Share Ratios
+```{r Per_Share_Ratios,echo=FALSE,comment=NA}
 ```
 
-## DCF
+### Profitability Ratios
+
+```{r Profitability_Ratios,echo=FALSE,comment=NA}
+```
+\newpage
+### Liquidity Ratios
+```{r Liquidity_Ratios,echo=FALSE,comment=NA}
+```
+
+### Valuation Ratios
+```{r Valuation_Ratios,echo=FALSE,comment=NA}
+```
+\newpage
+
+
+\newpage
+## Asset Under Management
+
+```{r AUM_consumer,echo=FALSE,comment=NA,fig.width=11,warning=FALSE}
+```
+
+```{r AUM_sme,echo=FALSE,comment=NA,fig.width=11,warning=FALSE}
+```
+
+
+```{r AUM_commercial,echo=FALSE,comment=NA,fig.width=11,warning=FALSE}
+```
+##DCF
 ```{r DCF,echo=FALSE,comment=NA}
 ```
-
+\newpage
 ##FCFE
 ```{r FCFE,echo=FALSE,comment=NA}
 ```
